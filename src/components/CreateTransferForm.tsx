@@ -130,7 +130,7 @@ export default function CreateTransferForm() {
                 {lastCreated.downloadUrl}
               </span>
             </p>
-            <TransferSharePreview {...lastCreated.preview} />
+            <TransferSharePreview {...lastCreated.preview} compact />
           </div>
         )}
 
