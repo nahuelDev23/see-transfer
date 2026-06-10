@@ -1,0 +1,7 @@
+version: "2"
+region: sa
+tunnels:
+  seetransfer:
+    proto: http
+    addr: host.docker.internal:3002
+    inspect: true

@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: seetransfer-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: seetransfer
+      POSTGRES_PASSWORD: seetransfer
+      POSTGRES_DB: seetransfer
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U seetransfer -d seetransfer"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: seetransfer-ngrok
+    restart: unless-stopped
+    command:
+      - "start"
+      - "seetransfer"
+      - "--config"
+      - "/etc/ngrok/ngrok.yml"
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    ports:
+      - "4041:4040"
+    volumes:
+      - ./ngrok.yml:/etc/ngrok/ngrok.yml:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  postgres_data:
